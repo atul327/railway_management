@@ -1,0 +1,136 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Railway Reservation System | Admin Dashboard</title>
+    <!-- Google Fonts & Font Awesome -->
+    <link href="https://fonts.googleapis.com/css2?family=Inter:opsz,wght@14..32,300;14..32,400;14..32,500;14..32,600;14..32,700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+    <!-- Chart.js CDN for simple analytics (optional) -->
+    <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.0/dist/chart.umd.min.js"></script>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+<div class="app-container">
+    <div class="header">
+        <div class="title-section">
+            <h1><i class="fas fa-train"></i> RailConnect Pro</h1>
+            <p>Reservation & Ticketing Management System</p>
+        </div>
+        <div class="status-badge"><i class="fas fa-circle"></i> Backend API: FastAPI active</div>
+    </div>
+
+    <!-- Tabs Navigation -->
+    <div class="tabs-nav">
+        <button class="tab-btn active" data-tab="passenger-tab"><i class="fas fa-user-plus"></i> Passenger</button>
+        <button class="tab-btn" data-tab="train-tab"><i class="fas fa-subway"></i> Train</button>
+        <button class="tab-btn" data-tab="reservation-tab"><i class="fas fa-ticket-alt"></i> Reservation</button>
+        <button class="tab-btn" data-tab="ticket-tab"><i class="fas fa-receipt"></i> Book Ticket</button>
+    </div>
+
+    <!-- Passenger Tab -->
+    <div id="passenger-tab" class="tab-pane active-pane">
+        <div class="card">
+            <h3><i class="fas fa-user-circle"></i> Register New Passenger</h3>
+            <form id="passengerForm">
+                <div class="form-grid">
+                    <div class="input-group"><label>Full Name *</label><input type="text" id="passengerName" placeholder="e.g., Rajesh Sharma" required></div>
+                    <div class="input-group"><label>Gender *</label><select id="passengerGender"><option>Male</option><option>Female</option><option>Other</option></select></div>
+                    <div class="input-group"><label>Mobile No *</label><input type="text" id="passengerMobile" placeholder="10 digits" maxlength="10" required></div>
+                    <div class="input-group"><label>Email *</label><input type="email" id="passengerEmail" placeholder="user@example.com" required></div>
+                </div>
+                <button type="submit" style="margin-top: 1rem;"><i class="fas fa-save"></i> Add Passenger</button>
+            </form>
+        </div>
+        <div class="card">
+            <h3><i class="fas fa-list"></i> Recent Passengers</h3>
+            <div class="data-table"><table id="passengerTable"><thead><tr><th>ID</th><th>Name</th><th>Gender</th><th>Mobile</th><th>Email</th></tr></thead><tbody><tr><td colspan="5">Loading...</td></tr></tbody></table></div>
+        </div>
+    </div>
+
+    <!-- Train Tab -->
+    <div id="train-tab" class="tab-pane">
+        <div class="card">
+            <h3><i class="fas fa-plus-circle"></i> Add New Train</h3>
+            <form id="trainForm">
+                <div class="form-grid">
+                    <div class="input-group"><label>Train Number *</label><input type="number" id="trainNo" placeholder="e.g., 12345" required></div>
+                    <div class="input-group"><label>Train Name *</label><input type="text" id="trainName" placeholder="e.g., Rajdhani Express" required></div>
+                </div>
+                <button type="submit"><i class="fas fa-train"></i> Add Train</button>
+            </form>
+        </div>
+        <div class="card">
+            <h3><i class="fas fa-table-list"></i> Train List</h3>
+            <div class="data-table"><table id="trainTable"><thead><tr><th>Train No</th><th>Train Name</th></tr></thead><tbody><tr><td colspan="2">Loading...</td></tr></tbody></table></div>
+        </div>
+    </div>
+
+    <!-- Reservation Tab (class types) -->
+    <div id="reservation-tab" class="tab-pane">
+        <div class="card">
+            <h3><i class="fas fa-chair"></i> Add Reservation Class</h3>
+            <form id="reservationForm">
+                <div class="form-grid">
+                    <div class="input-group"><label>Reservation ID (numeric)</label><input type="number" id="reservationId" placeholder="101" required></div>
+                    <div class="input-group"><label>Class Type *</label><input type="text" id="classType" placeholder="e.g., Sleeper, AC-3, AC-2" required></div>
+                </div>
+                <button type="submit"><i class="fas fa-tag"></i> Add Class</button>
+            </form>
+        </div>
+        <div class="card">
+            <h3><i class="fas fa-layer-group"></i> Available Classes</h3>
+            <div class="data-table"><table id="reservationTable"><thead><tr><th>Reservation ID</th><th>Class Type</th></tr></thead><tbody><tr><td colspan="2">Loading...</td></tr></tbody></table></div>
+        </div>
+    </div>
+
+    <!-- Ticket Booking Tab -->
+    <div id="ticket-tab" class="tab-pane">
+        <div class="card">
+            <h3><i class="fas fa-ticket"></i> Book a Ticket</h3>
+            <form id="ticketForm">
+                <div class="form-grid">
+                    <div class="input-group"><label>Journey Date *</label><input type="date" id="journeyDate" required></div>
+                    <div class="input-group"><label>Booking Date *</label><input type="date" id="bookingDate" required></div>
+                    <div class="input-group"><label>Seat Number *</label><input type="number" id="seatNo" placeholder="Seat number >0" required></div>
+                    <div class="input-group"><label>Passenger ID *</label><input type="number" id="passengerId" placeholder="Enter existing passenger ID" required></div>
+                    <div class="input-group"><label>Train Number *</label><input type="number" id="ticketTrainNo" placeholder="Train number" required></div>
+                    <div class="input-group"><label>Reservation ID *</label><input type="number" id="ticketResId" placeholder="Reservation class ID" required></div>
+                </div>
+                <button type="submit"><i class="fas fa-check-circle"></i> Book Ticket</button>
+            </form>
+            <div id="ticketStatus"></div>
+        </div>
+        <div class="card">
+            <h3><i class="fas fa-history"></i> Recent Bookings</h3>
+            <div class="data-table"><table id="ticketTable"><thead><tr><th>Ticket ID</th><th>Journey Date</th><th>Seat</th><th>Passenger ID</th><th>Train No</th><th>Class ID</th></tr></thead><tbody><tr><td colspan="6">No bookings yet</td></tr></tbody></table></div>
+        </div>
+    </div>
+
+    <!-- View Data Tab (all records) -->
+    <div id="view-tab" class="tab-pane">
+        <div class="stats-row" id="statsPanel"></div>
+        <div class="card">
+            <h3><i class="fas fa-users"></i> All Passengers</h3>
+            <div class="data-table"><table id="allPassengersTable"><thead><tr><th>ID</th><th>Name</th><th>Gender</th><th>Mobile</th><th>Email</th></tr></thead><tbody></tbody></table></div>
+        </div>
+        <div class="card">
+            <h3><i class="fas fa-train"></i> All Trains</h3>
+            <div class="data-table"><table id="allTrainsTable"><thead><tr><th>Train No</th><th>Train Name</th></tr></thead><tbody></tbody></table></div>
+        </div>
+        <div class="card">
+            <h3><i class="fas fa-chair"></i> All Reservation Classes</h3>
+            <div class="data-table"><table id="allReservationsTable"><thead><tr><th>Reservation ID</th><th>Class Type</th></tr></thead><tbody></tbody></table></div>
+        </div>
+        <div class="card">
+            <h3><i class="fas fa-ticket-alt"></i> All Tickets</h3>
+            <div class="data-table"><table id="allTicketsTable"><thead><tr><th>Ticket ID</th><th>Journey Date</th><th>Seat</th><th>Passenger ID</th><th>Train No</th></tr></thead><tbody></tbody></table></div>
+        </div>
+    </div>
+</div>
+<div id="toastMsg" class="toast-msg" style="display: none;"></div>
+
+<script src="script.js"></script>
+</body>
+</html>
