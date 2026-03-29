@@ -6,6 +6,10 @@ import models
 from database import engine, SessionLocal
 from sqlalchemy.orm import Session
 
+from fastapi.staticfiles import StaticFiles
+from fastapi.templating import Jinja2Templates
+
+
 
 from fastapi.middleware.cors import CORSMiddleware
 
@@ -13,6 +17,10 @@ from fastapi.middleware.cors import CORSMiddleware
 models.Base.metadata.create_all(bind=engine)
 
 app = FastAPI()
+
+app.mount("/static", StaticFiles(directory="static"), name="static")
+
+templates = Jinja2Templates(directory="templates")
 
 def get_db():
     db = SessionLocal()
